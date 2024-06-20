@@ -82,7 +82,7 @@ jobs:
       - name: Check files
         id: check_files
         run: |
-          git diff --name-only HEAD^ HEAD > files.txt
+          git diff --name-only HEAD^..HEAD > files.txt
           echo "run_job=false" >> $GITHUB_ENV
           while IFS= read -r file
           do
