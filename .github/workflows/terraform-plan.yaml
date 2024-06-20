@@ -1,0 +1,35 @@
+name: Terraform Infrastructure Plan
+
+on: 
+  pull_request:
+    branches:
+    - main
+    paths:
+      - 'gcp/modules/cloud_function/**'
+      - 'gcp/cloud_function/**'
+      - 'gcp/service/**'
+      - 'gcp/function/**'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment to run deploy (dev, stg, prd)"
+        type: environment
+        required: true
+        default: "dev"
+
+jobs:
+  infra:
+    name: Infra Plan
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment || 'dev' }}
+    steps:
+      - uses: action/checkout@v2
+
+      - name: Modify backend.tf
+        run: |
+          sed -i 's/terraform-gcp-function-state/terraform-state-${{ inputs.environment || 'dev' }}/g' backend.tf
+        working-directory: gcp/service
+      
+      - name: Show changes
+        run: git diff
+  

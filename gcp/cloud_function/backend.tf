@@ -1,7 +1,7 @@
 terraform {
   backend "gcs" {
     bucket      = "terraform-gcp-function-state"
-    prefix      = "terraform/state"
+    prefix      = "terraform/cloudfunction/state"
     credentials = "credentials.json"
   }
 }
