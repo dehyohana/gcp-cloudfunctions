@@ -83,7 +83,11 @@ jobs:
       - name: Check files
         id: check_files
         run: |
-          git diff --name-only HEAD^ HEAD > files.txt
+          if git show-ref --quiet --verify -- "HEAD^"; then
+            git diff --name-only HEAD^ HEAD > files.txt
+          else
+            git diff --name-only HEAD > files.txt
+          fi
           echo "run_job=false" >> $GITHUB_OUTPUT
           while IFS= read -r file
           do
