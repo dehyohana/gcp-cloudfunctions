@@ -124,3 +124,46 @@ jobs:
         with:
           name: function_artifact
           path: gcp/cloudfunction
+
+      - name: Modify backend.tf
+        run: |
+          sed -i 's/terraform-gcp-function-state/terraform-gcp-function-state-${{ inputs.environment || 'dev'}}/g' backend.tf
+        working-directory: gcp/cloudfunction
+      
+      - name: Show changes
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.6.0-beta2
+          terraform_wrapper: false
+          working-directory: gcp/cloudfunction
+      
+      - name: Export Google Cloud credentials
+        run: echo "$GCP_SA_KEY" > gcp/service/credentials.json
+        env:
+          GCP_SA_KEY: ${{ secrets.CREDENTIALS }}
+      
+      - name: Terraform Init
+        id: Init
+        run: |
+          terraform init
+        working-directory: gcp/service
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ./credentials.json
+
+      - name: Terraform Plan
+        id: plan
+        run: |
+          terraform plan -out tf.plan \
+          -var="credentials=./credentials.json" \
+          -var="region=${{vars.REGION}}" \
+          -var="project=${{vars.PROJECT}}" \
+          -var="cloudfunction_name=${{vars.CLOUDFUNCTION_NAME}}" \
+          -var="entry_point=${{vars.ENTRY_POINT}}" \
+          -var="bucket_source_name=${{vars.BUCKET_SOURCE_NAME}}" \
+          -var="object_source_name=function_${{ github_sha }}.zip" \
+          -var="code_source=functioncode.zip" \
+          -var="service_account_email={{vars.SERVICE_ACCOUNT_EMAIL}}" \
+          -var="bucket_trigger_name=${{vars.BUCKET_NAME}}"
+        working-directory: gcp/service
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ./credentials.json      
