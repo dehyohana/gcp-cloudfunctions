@@ -63,7 +63,7 @@ jobs:
           -var="credentials=./credentials.json" \
           -var="region=${{vars.REGION}}" \
           -var="project=${{vars.PROJECT}}" \
-          -var="bucket_name=${{vars.BUCKET_PROJECT}}" \
+          -var="bucket_name=${{vars.BUCKET_NAME}}" \
           -var="object_name=${{vars.OBJECT_NAME}}"
         working-directory: gcp/service
         env:
