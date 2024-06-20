@@ -97,4 +97,33 @@ jobs:
               break
             fi
           done < files.txt
-          echo run_job
+
+  update_source:
+    name: Update Cloud "function
+    needs: check_function_change
+    runs-on: ubuntu-latest
+    environment: ${{ github.events.inputs.environment || 'dev' }}
+    if: needs.check_function_change.outputs.run_job == 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Create Zip file
+        id: create_zip
+        run: |
+          zip_path="../functioncode.zip"
+          cd function && zip -r $zip_path ./*
+          cd ..
+          echo "zip_path=$zip_path" >> $GITHUB_ENV
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: function_artifact
+          path: ${{ github.workspace }}/functioncode.zip
+
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: function_artifact
+          path: gcp/cloudfunction
