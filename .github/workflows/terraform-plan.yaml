@@ -27,7 +27,7 @@ jobs:
 
       - name: Modify backend.tf
         run: |
-          sed -i 's/terraform-gcp-function-state/terraform-state-${{ inputs.environment || 'dev' }}/g' backend.tf
+          sed -i 's/terraform-gcp-function-state-${{ inputs.environment || 'dev' }}/g' backend.tf
         working-directory: gcp/service
       
       - name: Show changes
