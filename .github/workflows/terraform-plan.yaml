@@ -78,18 +78,17 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        with:
-          fetch_depth: 2
+
       - name: Check files
         id: check_files
         run: |
           git diff --name-only HEAD^ HEAD > files.txt
-          echo "run_job=false" >> $GITHUB_OUTPUT
+          echo "run_job=false" >> $GITHUB_ENV
           while IFS= read -r file
           do
             echo $file
             if [[ $file == "function/"* ]]; then
-              echo "run_job=true" >> $GITHUB_OUTPUT
+              echo "run_job=true" >> $GITHUB_ENV
               break
             fi
           done < files.txt
