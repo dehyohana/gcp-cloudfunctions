@@ -32,4 +32,26 @@ jobs:
       
       - name: Show changes
         run: git diff
-  
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.6.0-beta2
+          terraform_wrapper: false
+          working-directory: gcp/service
+
+      - name: Terraform Version
+        run: terraform --version
+
+      - name: Export Google Cloud credentials
+        run: echo "$GCP_SA_KEY" > gcp/service/credentials.json
+        env:
+          GCP_SA_KEY: ${{ secrets.CREDENTIALS }}
+      
+      - name: Terraform Init
+        id: Init
+        run: |
+          terraform init
+        working-directory: gcp/service
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ./credentials.json
