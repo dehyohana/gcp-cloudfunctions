@@ -85,12 +85,12 @@ jobs:
         id: check_files
         run: |
           git diff --name-only HEAD^ HEAD > files.txt
-          echo "run_job=false" >> $GITHUB_ENV
+          echo "run_job=false" >> $GITHUB_OUTPUT
           while IFS= read -r file
           do
             echo $file
             if [[ $file == "function/"* ]]; then
-              echo "run_job=true" >> $GITHUB_ENV
+              echo "run_job=true" >> $GITHUB_OUTPUT
               break
             fi
           done < files.txt
