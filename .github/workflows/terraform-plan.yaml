@@ -55,3 +55,16 @@ jobs:
         working-directory: gcp/service
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ./credentials.json
+
+      - name: Terraform Plan
+        id: plan
+        run: |
+          terraform plan - out tf.plam \
+          -var="credentials=./credentials.json" \
+          -var="region=${{vars.REGION}}" \
+          -var="project=${{vars.PROJECT}}" \
+          -var="bucket_name=${{vars.BUCKET_PROJECT}}" \
+          -var="object_name=${{vars.OBJECT_NAME}}"
+        working-directory: gcp/service
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ./credentials.json
