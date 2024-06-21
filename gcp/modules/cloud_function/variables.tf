@@ -49,4 +49,5 @@ variable "bucket_trigger_name" {
 variable "service_account_email" {
   type        = string
   description = "Name of the service account to deploy eventarc"
+  default     = null
 }
