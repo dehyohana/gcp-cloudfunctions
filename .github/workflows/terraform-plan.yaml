@@ -71,7 +71,7 @@ jobs:
 
   check_function_change:
     name: Check changed files
-    # needs: infra
+    needs: infra
     runs-on: ubuntu-latest
     outputs:
       run_job: ${{ steps.check_files.outputs.run_job }}
