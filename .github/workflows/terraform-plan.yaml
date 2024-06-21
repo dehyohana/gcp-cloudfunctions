@@ -146,7 +146,7 @@ jobs:
         id: Init
         run: |
           terraform init
-        working-directory: gcp/service
+        working-directory: gcp/cloudfunction
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ./credentials.json
 
@@ -161,9 +161,9 @@ jobs:
           -var="entry_point=${{vars.ENTRY_POINT}}" \
           -var="bucket_source_name=${{vars.BUCKET_SOURCE_NAME}}" \
           -var="object_source_name=function_${{ github.sha }}.zip" \
-          -var="code_source=functioncode.zip" \
-          -var="service_account_email={{vars.SERVICE_ACCOUNT_EMAIL}}" \
-          -var="bucket_trigger_name=${{vars.BUCKET_NAME}}"
-        working-directory: gcp/service
+          -var="code_source=functioncode.zip" 
+        working-directory: gcp/cloudfunction
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ./credentials.json      
+          # -var="service_account_email={{vars.SERVICE_ACCOUNT_EMAIL}}" \
+          # -var="bucket_trigger_name=${{vars.BUCKET_NAME}}"
