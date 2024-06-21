@@ -138,7 +138,7 @@ jobs:
           working-directory: gcp/cloudfunction
       
       - name: Export Google Cloud credentials
-        run: echo "$GCP_SA_KEY" > gcp/service/credentials.json
+        run: echo "$GCP_SA_KEY" > gcp/cloudfunction/credentials.json
         env:
           GCP_SA_KEY: ${{ secrets.CREDENTIALS }}
       
