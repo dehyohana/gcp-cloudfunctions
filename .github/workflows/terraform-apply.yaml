@@ -19,7 +19,7 @@ on:
 
 jobs:
   infra:
-    name: Infra Plan
+    name: Infra Apply
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment || 'dev' }}
     steps:
@@ -103,7 +103,7 @@ jobs:
           done < files.txt
 
   update_source:
-    name: Update Cloud "function
+    name: Update Cloud function
     needs: check_function_change
     runs-on: ubuntu-latest
     environment: ${{ github.events.inputs.environment || 'dev' }}
@@ -169,7 +169,7 @@ jobs:
           -var="bucket_source_name=${{vars.BUCKET_SOURCE_NAME}}" \
           -var="object_source_name=function_${{ github.sha }}.zip" \
           -var="code_source=functioncode.zip" \
-          -var="service_account_email={{vars.SERVICE_ACCOUNT_EMAIL}}" \
+          -var="service_account_email=${{vars.SERVICE_ACCOUNT_EMAIL}}" \
           -var="bucket_trigger_name=${{vars.BUCKET_NAME}}"
         working-directory: gcp/cloudfunction
         env:

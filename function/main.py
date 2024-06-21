@@ -15,7 +15,7 @@ def hello_http(request):
     """
     request_json = request.get_json(silent=True)
     request_args = request.args
-    bucket_name = 'my-bucket-name'
+    bucket_name = 'terraform-gcp-bucket-function'
     file_name = 'request.txt'
     storage_client = storage.Client()
     bucket = storage_client.bucket(bucket_name)
@@ -27,5 +27,5 @@ def hello_http(request):
     elif request_args and "name" in request_args:
         name = request_args["name"]
     else:
-        name = "World!"
+        name = "World"
     return f"{escape(request_json)}"
